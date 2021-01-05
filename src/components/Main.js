@@ -26,6 +26,7 @@ const StyledInput = styled.input`
   padding: 8px 8px;
   border-radius: 4px;
   border: none;
+  text-align: center;
 `;
 
 const StyledList = styled.ul`
@@ -33,20 +34,22 @@ const StyledList = styled.ul`
   padding: 0;
 
   li {
-    border: 0.5px solid #aeaeae;
+    border: 1px solid #909090;
     display: flex;
     justify-content: space-between;
     padding: 8px;
-    color: #aeaeae;
+    color: #909090;
     margin-bottom: 16px;
+    border-radius: 4px;
 
     .simulateCheckbox {
-      border: 1px solid #aeaeae;
+      border: 1px solid #909090;
       width: 14px;
       height: 14px;
       margin: auto 0;
       position: relative;
       text-decoration: none;
+      border-radius: 4px;
 
       &.crossed + .cross {
         text-decoration: line-through;
@@ -75,10 +78,11 @@ const Main = () => {
   const setNewTask = () => {
     var taskObj = { title: newTask.current.value, done: false };
     setTask(prevState => prevState.concat(taskObj));
+    newTask.current.value = "";
   }
 
   const deleteTask = (tskToDel) => {
-    setTask(tasks.filter(task => task.title !== tskToDel))
+    setTask(tasks.filter((task, key) => key !== tskToDel))
   }
 
   const toggleTask = async (keyVal) => {
@@ -106,7 +110,7 @@ const Main = () => {
             }
           </span>
           <span className={ task.done ? `cross` : `` }>{task.title}</span> 
-          <span className="trashcan" onClick={()=> deleteTask(task.title)}><i className="fas fa-trash"></i></span>
+          <span className="trashcan" onClick={()=> deleteTask(key)}><i className="fas fa-trash"></i></span>
         </li>
       ))
     )
@@ -114,6 +118,7 @@ const Main = () => {
 
   return (
     <StyledMain>
+      <h1>My TODOList</h1>
       <StyledList>{ listTasks(tasks) }</StyledList>
       <StyledInput type="text" ref={newTask} />
       <StyledButton onClick={() => setNewTask()} >Add Task</StyledButton>
