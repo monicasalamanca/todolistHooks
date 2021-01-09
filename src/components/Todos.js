@@ -81,21 +81,41 @@ const Todos = () => {
     var newTodo = { title: newTodoTitle.current.value, done: NOTDONE }
     // 2. Add the new object to the state
     setTodos([ ...todos, newTodo ]);
+    newTodoTitle.current.value = '';
   }
 
   const handleDeleteTodo = (ketToDel) => {
     setTodos(todos.filter((todo, key) => key !== ketToDel))
   }
 
+  const handleCrossOutTask = (key) => {
+    // 1. Find the taks taht we want to update
+
+    // 2. Create copy of array of tasks
+    const newTodos = [ ...todos ];
+    // 3. Update the value that we need
+    newTodos[key] = { ...newTodos[key], done: !newTodos['done'] };
+    // 4. Update the todo in State
+    setTodos(newTodos);
+  }
+
   const listTodos = () => {
     return (
-      <ul>
+      <StyledList>
         {
-          todos.map((index, key) => (
-            <li key={key}>{index.title}<span onClick={() => handleDeleteTodo(key)}>deleteTodo</span></li>
+          todos.map((todo, key) => (
+            <li key={key}>
+              <span className={`simulateCheckbox ${ todo.done ? 'crossed' : ''} `} onClick={() => handleCrossOutTask(key)}>
+                {
+                  todo.done ? <span className="checkmark">&#10003;</span> : null
+                }
+              </span>
+              <span className="cross">{todo.title}</span>
+              <span className="trashcan" onClick={() => handleDeleteTodo(key)}><i class="fas fa-trash"></i></span>
+            </li>
           ))
         }
-      </ul>
+      </StyledList>
     )
   }
   
@@ -107,9 +127,9 @@ const Todos = () => {
       {/* List of todos */}
       {listTodos()}
       {/* Input */}
-      <input type="text" ref={newTodoTitle} /> 
+      <StyledInput type="text" ref={newTodoTitle} /> 
       {/* button that adds to the list */}
-      <button onClick={handleAddTodo}>Add Task</button>
+      <StyledButton onClick={handleAddTodo}>Add Todo</StyledButton>
     </StyledMain>
   )
 }
